@@ -1,14 +1,16 @@
-package org.json.simple.parser;
+package pl.sollers.json.token;
 
-import java.io.IOException;
+import pl.sollers.json.ParseException;
+import pl.sollers.json.token.Token;
+
 import java.util.Map;
 import java.util.Set;
 
 public class Lexer {
     private static final char ESCAPE_CHAR = '\\';
-    private static final char DOUBLE_QUOTES = '"';
-    private static final char UNQUOTED = '-';
-    public static final char GLOBAL = 0;
+    private static final char SPACE_QUOTED = '"';
+    private static final char SPACE_UNQUOTED = '-';
+    public static final char SPACE_GLOBAL = 0;
     private final int length;
     private byte[] text;
     private byte space;
@@ -18,8 +20,10 @@ public class Lexer {
     private Map<Byte, Boolean> tokens = Map.of(Token.TYPE_LEFT_BRACE, true, Token.TYPE_LEFT_SQUARE, true,
             Token.TYPE_RIGHT_BRACE, true, Token.TYPE_RIGHT_SQUARE, true, Token.TYPE_COLON, true,
             Token.TYPE_COMMA, true);
-    private Set<Byte> startUnquoted = Set.of((byte) '-', (byte) '0', (byte) '1', (byte) '2', (byte) '3', (byte) '4', (byte) '5', (byte) '6', (byte) '7', (byte) '8', (byte) '9', (byte) 't', (byte) 'f', (byte) 'n');
-    private Set<Byte> endUnquoted = Set.of((byte) ',', (byte) ']', (byte) '}', (byte) ' ', (byte) '\t', (byte) '\r', (byte) '\n', (byte) '\b', (byte) '\f');
+    private Set<Byte> startUnquoted = Set.of((byte) '-', (byte) '0', (byte) '1', (byte) '2', (byte) '3', (byte) '4',
+            (byte) '5', (byte) '6', (byte) '7', (byte) '8', (byte) '9', (byte) 't', (byte) 'f', (byte) 'n');
+    private Set<Byte> endUnquoted = Set.of((byte) ',', (byte) ']', (byte) '}', (byte) ' ', (byte) '\t', (byte) '\r',
+            (byte) '\n', (byte) '\b', (byte) '\f');
 
     public Lexer(byte[] input) {
         this.text = input;
@@ -49,7 +53,7 @@ public class Lexer {
         boolean escape = false;
         int start = 0;
         while (readChar()) {
-            if (space == GLOBAL) {
+            if (space == SPACE_GLOBAL) {
                 if (tokens.containsKey(thisByte)) {
                     Token token = new Token(thisByte);
                     if (token.isOpening()) level++;
@@ -57,21 +61,21 @@ public class Lexer {
                     return token;
                 }
                 if (startUnquoted.contains(thisByte)) {
-                    space = UNQUOTED;
+                    space = SPACE_UNQUOTED;
                     start = getPosition();
                     continue;
                 }
-                if (thisByte == DOUBLE_QUOTES) {
-                    space = DOUBLE_QUOTES;
+                if (thisByte == SPACE_QUOTED) {
+                    space = SPACE_QUOTED;
                     start = getPosition();
                 }
-            } else if (space == UNQUOTED) {
+            } else if (space == SPACE_UNQUOTED) {
                 if (endUnquoted.contains(thisByte)) {
-                    space = GLOBAL;
+                    space = SPACE_GLOBAL;
                     goBack();
                     return new Token(Token.TYPE_UNQUOTED, text, start-1, getPosition() - start + 1);
                 }
-            } else if (space == DOUBLE_QUOTES) {
+            } else if (space == SPACE_QUOTED) {
                 if (escape) {
                     escape = false;
                     continue;
@@ -80,8 +84,8 @@ public class Lexer {
                     escape = true;
                     continue;
                 }
-                if (thisByte == DOUBLE_QUOTES) {
-                    space = GLOBAL;
+                if (thisByte == SPACE_QUOTED) {
+                    space = SPACE_GLOBAL;
                     return new Token(Token.TYPE_STRING, text, start, getPosition() - start - 1);
                 }
             }

@@ -1,11 +1,10 @@
-package org.json.simple.parser;
+package pl.sollers.json;
 
 import junit.framework.TestCase;
+import pl.sollers.json.token.Lexer;
+import pl.sollers.json.token.Token;
 
-import java.io.Reader;
-import java.io.StringReader;
-
-public class YylexTest extends TestCase {
+public class LexerTest extends TestCase {
 
 	public void testYylex() throws Exception {
 		String s = "\"\\/\"";

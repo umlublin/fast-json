@@ -2,16 +2,13 @@
  * $Id: Test.java,v 1.1 2006/04/15 14:40:06 platform Exp $
  * Created on 2006-4-15
  */
-package org.json.simple;
+package pl.sollers.json;
 
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonReader;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
 import junit.framework.TestCase;
-import org.json.simple.parser.JSONArrayParser;
-import org.json.simple.parser.JSONMapParser;
-import org.json.simple.parser.JSONParser;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,11 +25,13 @@ public class FileTest extends TestCase {
         long start = System.nanoTime();
         JSONParser jsonParser = new JSONParser(bytes);
         final int[] count = {0};
-        jsonParser.asArray().getIterator().forEachRemaining(it -> {
-            System.out.println(it.toString());
-//            count[0]++;
-//            if (count[0] > 20) System.exit(1);
-        });
+        for (JSONEntry e : jsonParser) {
+            //System.out.println(e.toString());
+        }
+//                .(it -> {
+////            count[0]++;
+////            if (count[0] > 20) System.exit(1);
+//        });
 //        System.out.println("Map:"+asArray.isMap());
 //        System.out.println("asMap()");
 //        JSONMapParser asMap = asArray.asMap();
@@ -67,8 +66,8 @@ public class FileTest extends TestCase {
         Any any = JsonIterator.deserialize(bytes);
         int z;
         for (Any element : any) {
-            Map<String, Any> map = element.asMap();
-            System.out.println(element.asMap());
+//FileTest            Map<String, Any> map = element.asMap();
+            //System.out.println(element.asMap());
             //System.out.println("."+z);
         }
 //

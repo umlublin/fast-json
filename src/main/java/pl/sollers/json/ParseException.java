@@ -1,4 +1,4 @@
-package org.json.simple.parser;
+package pl.sollers.json;
 
 public class ParseException extends Exception {
 
