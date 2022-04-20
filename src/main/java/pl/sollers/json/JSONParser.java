@@ -1,7 +1,3 @@
-/*
- * $Id: JSONParser.java,v 1.1 2006/04/15 14:10:48 platform Exp $
- * Created on 2006-4-15
- */
 package pl.sollers.json;
 
 
@@ -12,11 +8,6 @@ import pl.sollers.json.token.Token;
 
 import java.util.Iterator;
 
-/**
- * Parser for JSON text. Please note that JSONParser is NOT thread-safe.
- *
- * @author FangYidong<fangyidong @ yahoo.com.cn>
- */
 public class JSONParser implements Iterable<JSONEntry> {
 
     protected int level;
@@ -33,36 +24,17 @@ public class JSONParser implements Iterable<JSONEntry> {
         level = lexer.getLevel();
         do {
             this.token = lexer.getNextToken();
-            if (token.type == Token.TYPE_EOF) {
+            if (token == Token.EOF) {
                 throw new ParseException(ParseException.END_OF_FILE);
             }
-        } while (token.type == Token.TYPE_COMMA);
+        } while (token == Token.COMMA);
     }
 
     public JSONParser() {
     }
 
     public void skip() {
-        try {
-            lexer.skipTo(level);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public boolean isValue() {
-        return token.type == Token.TYPE_STRING || token.type == Token.TYPE_UNQUOTED;
-    }
-
-    public String getAsString() {
-        if (isValue()) {
-            return token.getValue();
-        }
-        return null;
-    }
-
-    public int getPosition() {
-        return lexer.getPosition();
+        lexer.skipTo(level);
     }
 
     @Override
@@ -73,11 +45,11 @@ public class JSONParser implements Iterable<JSONEntry> {
 
 
     public boolean isArray() {
-        return token.type == Token.LEFT_SQUARE;
+        return token == Token.LEFT_SQUARE;
     }
 
     public boolean isMap() {
-        return token.type == Token.LEFT_BRACE;
+        return token == Token.LEFT_BRACE;
     }
 
     @Override

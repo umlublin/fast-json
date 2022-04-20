@@ -19,19 +19,19 @@ public class MapIterator implements Iterator<JSONEntry> {
     public boolean hasNext() {
         try {
             Token nextToken = lexer.getNextToken();
-            if (nextToken.type == Token.TYPE_COMMA) {
+            if (nextToken == Token.COMMA) {
                 nextToken = lexer.getNextToken(); //eat next
             }
-            if (nextToken.type == Token.RIGHT_BRACE) { //end of map
+            if (nextToken == Token.RIGHT_BRACE) { //end of map
                 throw new ParseException(ParseException.END_OF_MAP);
             }
-            if (nextToken.type != Token.TYPE_STRING) {
+            if (!nextToken.isString()) {
                 System.out.println(nextToken);
                 throw new ParseException(ParseException.ERROR_KEY_NOT_STRING);
             }
             String key = nextToken.getValue();
             nextToken = lexer.getNextToken();
-            if (nextToken.type != Token.TYPE_COLON) {
+            if (nextToken != Token.COLON) {
                 throw new ParseException(ParseException.COLON_EXPECTED);
             }
             JSONParser value = new JSONParser(lexer);

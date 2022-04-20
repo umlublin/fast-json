@@ -11,7 +11,7 @@ public class LexerTest extends TestCase {
 		System.out.println(s);
 		Lexer lexer = new Lexer(s.getBytes());
 		Token token = lexer.getNextToken();
-		assertEquals(Token.TYPE_UNQUOTED, token.type);
+		assertEquals(Token.UNQUOTED, token.type);
 		assertEquals("/", token.getValue());
 	}
 
@@ -20,7 +20,7 @@ public class LexerTest extends TestCase {
 		System.out.println(s);
 		Lexer lexer = new Lexer(s.getBytes());
 		Token token = lexer.getNextToken();
-		assertEquals(Token.TYPE_UNQUOTED, token.type);
+		assertEquals(Token.UNQUOTED, token.type);
 		System.out.println("'"+token.getValue()+"'");
 		assertEquals("abc/\r\b\n\t\f\\", token.getValue());
 	}
@@ -30,11 +30,11 @@ public class LexerTest extends TestCase {
 		System.out.println(s);
 		Lexer lexer = new Lexer(s.getBytes());
 		Token token = lexer.getNextToken();
-		assertEquals(Token.LEFT_SQUARE, token.type);
+		assertEquals(Token.LEFT_SQUARE, token);
 		token = lexer.getNextToken();
-		assertEquals(Token.LEFT_BRACE, token.type);
+		assertEquals(Token.LEFT_BRACE, token);
 		token = lexer.getNextToken();
-		assertEquals(Token.RIGHT_BRACE, token.type);
+		assertEquals(Token.RIGHT_BRACE, token);
 	}
 
 	public void testComplex() throws Exception {
@@ -43,16 +43,16 @@ public class LexerTest extends TestCase {
 		Lexer lexer = new Lexer(s.getBytes());
 		Token token = lexer.getNextToken();
 		System.out.println(token);
-		assertEquals(Token.LEFT_SQUARE, token.type);
+		assertEquals(Token.LEFT_SQUARE, token);
 		token = lexer.getNextToken();
 		System.out.println(token);
-		assertEquals(Token.TYPE_UNQUOTED, token.type);
+		assertEquals(Token.UNQUOTED, token.type);
 		token = lexer.getNextToken();
 		System.out.println(token);
-		assertEquals(Token.TYPE_COMMA, token.type);
+		assertEquals(Token.COMMA, token);
 		token = lexer.getNextToken();
 		System.out.println(token);
-		assertEquals(Token.LEFT_BRACE, token.type);
+		assertEquals(Token.LEFT_BRACE, token);
 	}
 
 }

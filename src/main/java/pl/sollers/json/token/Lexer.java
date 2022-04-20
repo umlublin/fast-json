@@ -15,8 +15,6 @@ public class Lexer {
     private byte thisByte;
     private int position;
     private int level = 0;
-    private Set<Byte> tokens = Set.of(Token.LEFT_BRACE, Token.LEFT_SQUARE, Token.RIGHT_BRACE,
-            Token.RIGHT_SQUARE, Token.TYPE_COLON, Token.TYPE_COMMA);
     private Set<Byte> startUnquoted = Set.of((byte) '-', (byte) '0', (byte) '1', (byte) '2', (byte) '3', (byte) '4',
             (byte) '5', (byte) '6', (byte) '7', (byte) '8', (byte) '9', (byte) 't', (byte) 'f', (byte) 'n');
     private Set<Byte> endUnquoted = Set.of((byte) ',', (byte) ']', (byte) '}', (byte) ' ', (byte) '\t', (byte) '\r',
@@ -51,10 +49,9 @@ public class Lexer {
         int start = 0;
         while (readChar()) {
             if (space == SPACE_GLOBAL) {
-                if (tokens.contains(thisByte)) {
-                    Token token = new Token(thisByte);
-                    if (token.isOpening()) level++;
-                    if (token.isClosing()) level--;
+                Token token = Token.tokens[thisByte];
+                if (token != null) {
+                    level += token.levelIncrement;
                     return token;
                 }
                 if (startUnquoted.contains(thisByte)) {
@@ -70,7 +67,7 @@ public class Lexer {
                 if (endUnquoted.contains(thisByte)) {
                     space = SPACE_GLOBAL;
                     goBack();
-                    return new Token(Token.TYPE_UNQUOTED, text, start - 1, getPosition() - start + 1);
+                    return new Token(Token.UNQUOTED, text, start - 1, getPosition() - start + 1);
                 }
             } else if (space == SPACE_QUOTED) {
                 if (escape) {
@@ -83,41 +80,38 @@ public class Lexer {
                 }
                 if (thisByte == SPACE_QUOTED) {
                     space = SPACE_GLOBAL;
-                    return new Token(Token.TYPE_STRING, text, start, getPosition() - start - 1);
+                    return new Token(Token.STRING, text, start, getPosition() - start - 1);
                 }
             }
         }
-        return new Token(Token.TYPE_EOF);
+        return Token.EOF;
     }
 
     public int getLevel() {
         return level;
     }
 
-    public void skipTo(int targetLevel) throws ParseException {
+    public void skipTo(int targetLevel) {
         //System.out.println("Level "+level+", Skip to " + targetLevel + "pos: "+ position);
         int space = SPACE_GLOBAL;
+        boolean escape = false;
         while (level > targetLevel) {
-            boolean escape = false;
             thisByte = text[position]; //out of array
             position++;
             if (space == SPACE_GLOBAL) {
-                if (thisByte == Token.LEFT_BRACE || thisByte == Token.LEFT_SQUARE) level++;
-                else
-                if (thisByte == Token.RIGHT_BRACE || thisByte == Token.RIGHT_SQUARE) level--;
-                else
-                if (thisByte == SPACE_QUOTED) {
+                Token token = Token.tokens[thisByte];
+                if (token != null) {
+                    level += token.levelIncrement;
+                } else if (thisByte == SPACE_QUOTED) {
                     space = SPACE_QUOTED;
                     escape = false;
                 }
-            } else if (space == SPACE_QUOTED) {
+            } else {
                 if (escape) {
                     escape = false;
-                } else
-                if (thisByte == ESCAPE_CHAR) {
+                } else if (thisByte == ESCAPE_CHAR) {
                     escape = true;
-                } else
-                if (thisByte == SPACE_QUOTED) {
+                } else if (thisByte == SPACE_QUOTED) {
                     space = SPACE_GLOBAL;
                 }
             }
