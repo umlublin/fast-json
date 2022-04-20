@@ -30,11 +30,11 @@ public class LexerTest extends TestCase {
 		System.out.println(s);
 		Lexer lexer = new Lexer(s.getBytes());
 		Token token = lexer.getNextToken();
-		assertEquals(Token.TYPE_LEFT_SQUARE, token.type);
+		assertEquals(Token.LEFT_SQUARE, token.type);
 		token = lexer.getNextToken();
-		assertEquals(Token.TYPE_LEFT_BRACE, token.type);
+		assertEquals(Token.LEFT_BRACE, token.type);
 		token = lexer.getNextToken();
-		assertEquals(Token.TYPE_RIGHT_BRACE, token.type);
+		assertEquals(Token.RIGHT_BRACE, token.type);
 	}
 
 	public void testComplex() throws Exception {
@@ -43,7 +43,7 @@ public class LexerTest extends TestCase {
 		Lexer lexer = new Lexer(s.getBytes());
 		Token token = lexer.getNextToken();
 		System.out.println(token);
-		assertEquals(Token.TYPE_LEFT_SQUARE, token.type);
+		assertEquals(Token.LEFT_SQUARE, token.type);
 		token = lexer.getNextToken();
 		System.out.println(token);
 		assertEquals(Token.TYPE_UNQUOTED, token.type);
@@ -52,7 +52,7 @@ public class LexerTest extends TestCase {
 		assertEquals(Token.TYPE_COMMA, token.type);
 		token = lexer.getNextToken();
 		System.out.println(token);
-		assertEquals(Token.TYPE_LEFT_BRACE, token.type);
+		assertEquals(Token.LEFT_BRACE, token.type);
 	}
 
 }

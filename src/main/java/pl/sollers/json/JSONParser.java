@@ -43,12 +43,10 @@ public class JSONParser implements Iterable<JSONEntry> {
     }
 
     public void skip() {
-        while(lexer.getLevel() > level) {
-            try {
-                lexer.getNextToken();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+        try {
+            lexer.skipTo(level);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
@@ -75,11 +73,11 @@ public class JSONParser implements Iterable<JSONEntry> {
 
 
     public boolean isArray() {
-        return token.type == Token.TYPE_LEFT_SQUARE;
+        return token.type == Token.LEFT_SQUARE;
     }
 
     public boolean isMap() {
-        return token.type == Token.TYPE_LEFT_BRACE;
+        return token.type == Token.LEFT_BRACE;
     }
 
     @Override

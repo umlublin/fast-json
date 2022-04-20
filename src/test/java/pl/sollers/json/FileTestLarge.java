@@ -4,14 +4,10 @@
  */
 package pl.sollers.json;
 
-import com.dslplatform.json.DslJson;
-import com.dslplatform.json.JsonReader;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
 import junit.framework.TestCase;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 

@@ -7,10 +7,10 @@ package pl.sollers.json.token;
 public class Token {
     public static final byte TYPE_UNQUOTED = 0;
     public static final byte TYPE_STRING = 1;
-    public static final byte TYPE_LEFT_BRACE = '{';
-    public static final byte TYPE_RIGHT_BRACE = '}';
-    public static final byte TYPE_LEFT_SQUARE = '[';
-    public static final byte TYPE_RIGHT_SQUARE = ']';
+    public static final byte LEFT_BRACE = '{';
+    public static final byte RIGHT_BRACE = '}';
+    public static final byte LEFT_SQUARE = '[';
+    public static final byte RIGHT_SQUARE = ']';
     public static final byte TYPE_COMMA = ',';
     public static final byte TYPE_COLON = ':';
     public static final byte TYPE_EOF = -1;//end of file
@@ -32,11 +32,11 @@ public class Token {
     }
 
     public boolean isOpening() {
-        return (type == TYPE_LEFT_BRACE || type == TYPE_LEFT_SQUARE);
+        return (type == LEFT_BRACE || type == LEFT_SQUARE);
     }
 
     public boolean isClosing() {
-        return (type == TYPE_RIGHT_BRACE || type == TYPE_RIGHT_SQUARE);
+        return (type == RIGHT_BRACE || type == RIGHT_SQUARE);
     }
 
     public String toString() {
@@ -48,16 +48,16 @@ public class Token {
             case TYPE_STRING:
                 sb.append("STRING(").append(getValue()).append(")");
                 break;
-            case TYPE_LEFT_BRACE:
+            case LEFT_BRACE:
                 sb.append("LEFT BRACE({)");
                 break;
-            case TYPE_RIGHT_BRACE:
+            case RIGHT_BRACE:
                 sb.append("RIGHT BRACE(})");
                 break;
-            case TYPE_LEFT_SQUARE:
+            case LEFT_SQUARE:
                 sb.append("LEFT SQUARE([)");
                 break;
-            case TYPE_RIGHT_SQUARE:
+            case RIGHT_SQUARE:
                 sb.append("RIGHT SQUARE(])");
                 break;
             case TYPE_COMMA:

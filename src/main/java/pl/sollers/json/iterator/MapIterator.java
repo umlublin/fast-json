@@ -22,7 +22,7 @@ public class MapIterator implements Iterator<JSONEntry> {
             if (nextToken.type == Token.TYPE_COMMA) {
                 nextToken = lexer.getNextToken(); //eat next
             }
-            if (nextToken.type == Token.TYPE_RIGHT_BRACE) { //end of map
+            if (nextToken.type == Token.RIGHT_BRACE) { //end of map
                 throw new ParseException(ParseException.END_OF_MAP);
             }
             if (nextToken.type != Token.TYPE_STRING) {
