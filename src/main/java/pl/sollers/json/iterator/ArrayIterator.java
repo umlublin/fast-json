@@ -1,15 +1,14 @@
 package pl.sollers.json.iterator;
 
-import pl.sollers.json.JSONEntry;
 import pl.sollers.json.JSONParser;
 import pl.sollers.json.token.Lexer;
 import pl.sollers.json.ParseException;
 
 import java.util.Iterator;
 
-public class ArrayIterator implements Iterator<JSONEntry> {
+public class ArrayIterator implements Iterator<JSONParser> {
     private Lexer lexer;
-    private JSONEntry entry;
+    private JSONParser entry;
     private Long count = 0L;
 
     public ArrayIterator(Lexer lexer) {
@@ -20,9 +19,12 @@ public class ArrayIterator implements Iterator<JSONEntry> {
     public boolean hasNext() {
         try {
             if (entry != null) {
-                entry.getValue().skip();
+                entry.skip();
             }
-            entry = new JSONEntry(count.toString(), new JSONParser(lexer));
+            entry = new JSONParser(lexer, count.toString());
+            if (entry.endOfIteration()) {
+                return false;
+            }
             count++;
         } catch (ParseException e) {
             return false;
@@ -31,7 +33,7 @@ public class ArrayIterator implements Iterator<JSONEntry> {
     }
 
     @Override
-    public JSONEntry next() {
+    public JSONParser next() {
         return entry;
     }
 }

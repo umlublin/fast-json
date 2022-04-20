@@ -16,7 +16,7 @@ public class FileTest extends TestCase {
         long start = System.nanoTime();
         JSONParser jsonParser = new JSONParser(bytes);
         int count=0;
-        for (JSONEntry e : jsonParser) {
+        for (JSONParser e : jsonParser) {
             count++;
             //System.out.println(e.toString());
         }
@@ -33,6 +33,7 @@ public class FileTest extends TestCase {
         int count = 0;
         for (Any element : any) {
             count++;
+            element.asMap();
         }
         long stop = System.nanoTime();
         long x = stop - start;

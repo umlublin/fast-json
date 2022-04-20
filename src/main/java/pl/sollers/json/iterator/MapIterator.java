@@ -6,10 +6,10 @@ import pl.sollers.json.token.Token;
 
 import java.util.Iterator;
 
-public class MapIterator implements Iterator<JSONEntry> {
+public class MapIterator implements Iterator<JSONParser> {
 
     private final Lexer lexer;
-    private JSONEntry entry;
+    private JSONParser entry;
 
     public MapIterator(Lexer lexer) {
         this.lexer = lexer;
@@ -34,8 +34,7 @@ public class MapIterator implements Iterator<JSONEntry> {
             if (nextToken != Token.COLON) {
                 throw new ParseException(ParseException.COLON_EXPECTED);
             }
-            JSONParser value = new JSONParser(lexer);
-            entry = new JSONEntry(key, value);
+            entry = new JSONParser(lexer, key);
         } catch (ParseException e) {
             return false;
         }
@@ -43,7 +42,7 @@ public class MapIterator implements Iterator<JSONEntry> {
     }
 
     @Override
-    public JSONEntry next() {
+    public JSONParser next() {
         return entry;
     }
 }

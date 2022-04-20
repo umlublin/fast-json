@@ -16,7 +16,7 @@ public class FileTestLarge extends TestCase {
         long start = System.nanoTime();
         JSONParser jsonParser = new JSONParser(bytes);
         int count=0;
-        for (JSONEntry e : jsonParser) {
+        for (JSONParser e : jsonParser) {
             count++;
             //System.out.println(e.toString());
         }

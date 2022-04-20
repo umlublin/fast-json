@@ -65,7 +65,7 @@ public class Token {
                 sb.append("END OF FILE");
                 break;
             default:
-                sb.append("TOKEN(").append(type).append(")");
+                sb.append("TOKEN(").append((char) type).append(")");
         }
         return sb.toString();
     }

@@ -8,11 +8,12 @@ import pl.sollers.json.token.Token;
 
 import java.util.Iterator;
 
-public class JSONParser implements Iterable<JSONEntry> {
+public class JSONParser implements Iterable<JSONParser> {
 
     protected int level;
     protected Lexer lexer;
     Token token = null;
+    String key = "."; //ROOT
 
     public JSONParser(byte[] bytes) throws ParseException {
         this(new Lexer(bytes));
@@ -20,7 +21,6 @@ public class JSONParser implements Iterable<JSONEntry> {
 
     public JSONParser(Lexer lexer) throws ParseException {
         this.lexer = lexer;
-        //System.out.println("LVL:"+lexer.getLevel());
         level = lexer.getLevel();
         do {
             this.token = lexer.getNextToken();
@@ -33,6 +33,11 @@ public class JSONParser implements Iterable<JSONEntry> {
     public JSONParser() {
     }
 
+    public JSONParser(Lexer lexer, String key) throws ParseException {
+        this(lexer);
+        this.key = key;
+    }
+
     public void skip() {
         lexer.skipTo(level);
     }
@@ -40,7 +45,7 @@ public class JSONParser implements Iterable<JSONEntry> {
     @Override
     public String toString() {
         return "JSONParser{" +
-                "level=" + level + ", pos=" + lexer.getPosition() + ", token=" + token + '}';
+                "key="+ key + ", level=" + level + ", pos=" + lexer.getPosition() + ", token=" + token + '}';
     }
 
 
@@ -53,7 +58,7 @@ public class JSONParser implements Iterable<JSONEntry> {
     }
 
     @Override
-    public Iterator<JSONEntry> iterator() {
+    public Iterator<JSONParser> iterator() {
         if (isMap())
             return new MapIterator(lexer);
         if (isArray())
@@ -61,4 +66,7 @@ public class JSONParser implements Iterable<JSONEntry> {
         return null;
     }
 
+    public boolean endOfIteration() {
+        return token.levelIncrement < 0;
+    }
 }
